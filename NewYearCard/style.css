@@ -9,7 +9,7 @@ body{
     linear-gradient(135deg, #1b1f3a 0%, #3b1d6b 40%, #102a43 100%);
 }
 
-/* ---------- Background festive elements ---------- */
+/* ---------- Background festive elements (z-index: 0) ---------- */
 .bg-firework{
   position:absolute;width:4px;height:4px;border-radius:50%;background:transparent;z-index:0;opacity:0;
   box-shadow:0 0 0 #ffd700,0 0 0 #ff1493,0 0 0 #00ff7f,0 0 0 #ff8c00;
@@ -71,7 +71,25 @@ body{
   50%{transform:scale(1.25);opacity:.8}
 }
 
-/* ---------- UI cards ---------- */
+/* ---------- EMOJI RAIN LAYER (z-index: 1 - BEHIND TEXT) ---------- */
+#emoji-layer{
+  position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 1;
+}
+.emoji-pop{
+  position: absolute; left: 0; bottom: -50px;
+  font-size: var(--size, 32px);
+  transform: translate3d(0,0,0);
+  opacity: 0.8; /* slightly transparent so bg shows */
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.3));
+  animation: emoji-fly var(--dur, 2s) ease-out forwards;
+}
+@keyframes emoji-fly{
+  0%   { opacity: 0; transform: translate3d(0,0,0) rotate(0deg) scale(.5); }
+  10%  { opacity: 0.9; }
+  100% { opacity: 0; transform: translate3d(var(--drift, 0px), -120vh, 0) rotate(720deg) scale(1.4); }
+}
+
+/* ---------- UI cards (z-index: 2 - ON TOP) ---------- */
 .card{
   position:relative;z-index:2;width:min(460px,92vw);
   padding:2.4rem 2rem;border-radius:18px;text-align:center;
@@ -110,15 +128,15 @@ body{
 .switch input:checked + .slider{background:rgba(255,204,112,.65)}
 .switch input:checked + .slider:before{transform:translateX(20px)}
 
-/* ---------- Celebration screen ---------- */
+/* ---------- Celebration screen (z-index: 3 - HIGHEST) ---------- */
 .celebration{
   position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;z-index:3;
 }
 .hidden{display:none}
-.greet{font-size:2.5rem;text-shadow:0 0 34px rgba(255,255,255,.8);margin-bottom:.7rem}
-.msg{max-width:520px;padding:0 1.2rem;opacity:.95;line-height:1.55}
-.actions{margin-top:1.4rem}
+.greet{font-size:2.5rem;text-shadow:0 0 34px rgba(255,255,255,.8);margin-bottom:.7rem;position:relative;z-index:4}
+.msg{max-width:520px;padding:0 1.2rem;opacity:.95;line-height:1.55;position:relative;z-index:4}
+.actions{margin-top:1.4rem;position:relative;z-index:4}
 .ghost{
   padding:.7rem 1.2rem;border-radius:999px;border:2px solid rgba(255,255,255,.35);
   background:rgba(255,255,255,.10);color:#fff;cursor:pointer;
@@ -131,10 +149,10 @@ body{
 @keyframes fadeOut{to{opacity:0;transform:scale(.96)}}
 @keyframes fadeIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:scale(1)}}
 
-/* ---------- Fireworks (3 types) ---------- */
+/* ---------- Fireworks (3 types) (z-index: 2 - With text) ---------- */
 .fw{
   position:absolute;width:8px;height:8px;border-radius:50%;
-  opacity:0;transform:scale(0);z-index:4;
+  opacity:0;transform:scale(0);z-index:2;
 }
 .fw.run{opacity:1;transform:scale(1)}
 /* positions */
@@ -208,24 +226,4 @@ body{
   .title{font-size:1.7rem}
   .greet{font-size:2rem}
   .card{padding:2rem 1.4rem}
-}
-
-
-
-/* ---------- Emoji Rain Layer ---------- */
-#emoji-layer{
-  position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 10;
-}
-.emoji-pop{
-  position: absolute; left: 0; bottom: -50px;
-  font-size: var(--size, 32px);
-  transform: translate3d(0,0,0);
-  opacity: 0;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,.3));
-  animation: emoji-fly var(--dur, 2s) ease-out forwards;
-}
-@keyframes emoji-fly{
-  0%   { opacity: 0; transform: translate3d(0,0,0) rotate(0deg) scale(.5); }
-  10%  { opacity: 1; }
-  100% { opacity: 0; transform: translate3d(var(--drift, 0px), -120vh, 0) rotate(720deg) scale(1.4); }
 }
